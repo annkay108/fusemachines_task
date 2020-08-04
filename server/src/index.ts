@@ -1,31 +1,42 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import mongoose from "mongoose";
+import dotenv = require('dotenv');
+dotenv.config();
 // import logger from "morgan";
 // import cors from "cors";
 
 import indexRoutes from "./routes/indexRoutes";
 
-class Server{
+class Server {
   public app: express.Application;
-  constructor(){
+  constructor() {
     this.app = express();
     this.config();
     this.routes();
   }
-  public config(): void{
+  public config(): void {
+    // Mongoose connection
+    mongoose.connect(process.env.MONGODB_URI, {
+      keepAlive: true,
+      useNewUrlParser: true,
+      reconnectTries: Number.MAX_VALUE,
+      useUnifiedTopology: true
+    })
+    .then(()=>console.log("Connected to database"))
+    .catch((err)=>console.log(err));
     // Setting the port value
-    this.app.set('port', process.env.PORT||3000);
+    this.app.set("port", process.env.PORT || 5000);
   }
 
-  public routes():void{
+  public routes(): void {
     const router: express.Router = express.Router();
 
-    this.app.use('/',indexRoutes);
+    this.app.use("/", indexRoutes);
   }
 
-  public start():void{
-    this.app.listen(this.app.get('port'),()=>{
-      console.log('Server is listening on port', this.app.get('port'));
+  public start(): void {
+    this.app.listen(this.app.get("port"), () => {
+      console.log("Server is listening on port", this.app.get("port"));
     });
   }
 }
