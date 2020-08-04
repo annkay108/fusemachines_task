@@ -36,7 +36,6 @@ class Server {
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({extended: false}));
     this.app.use(express.static(path.join(__dirname, 'public')));
-    console.log(__dirname);
 
     // CORS MIDDLEWARE SETUP
     this.app.use(

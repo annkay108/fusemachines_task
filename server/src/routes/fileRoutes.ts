@@ -2,10 +2,7 @@ import { Router, Request, Response, NextFunction } from "express";
 import createError from "http-errors";
 
 import File from "../models/File";
-
-interface MulterRequest extends Request{
-    file: any
-}
+import upload from "../config/multerConfig";
 
 class FileRoute{
     router: Router;
@@ -15,18 +12,12 @@ class FileRoute{
     }
 
     public async addFile(req: Request, res: Response):Promise<void>{
-        const file = (req as MulterRequest).file;
-        file.mv(`${process.env.URI}/public/${file.name}`,(err:any)=>{
-            if(err){
-                console.error(err);
-                return res.status(500).send(err);
-            }
-            res.json({ fileName: file.name})
-        })
+        const imageUrl = req.files;
+        res.status(201).json(imageUrl);
     }
 
     routes(): void{
-        this.router.post("/",this.addFile);
+        this.router.post("/:courseId", upload, this.addFile);
     }
 }
 
