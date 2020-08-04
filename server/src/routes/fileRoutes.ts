@@ -25,12 +25,10 @@ class FileRoute{
         try {
             const { courseId } = req.params;
             const filesArr:any = req.files;
-            console.log("length",filesArr.length);
-            console.log("filesArr", filesArr);
             const { lastModified, dateAdded} = req.body;
 
             for (const i of filesArr){
-                const newFile = await (await File.create({ lastModified, dateAdded, fileUri: i.destination, courseId})).populate("courseId");
+                const newFile = await (await File.create({ lastModified, dateAdded, fileUri: i.destination, courseId, fileName: i.filename})).populate("courseId");
                 const addCourseFile = await Course.findByIdAndUpdate(courseId,{lastModified, $push:{courseFile: newFile._id}}).populate('newFile');
             }
             res.status(200).json(filesArr.length+"file added")
