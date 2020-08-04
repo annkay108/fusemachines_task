@@ -1,6 +1,9 @@
 import { Request, Response, Router, NextFunction } from "express";
 import createError from "http-errors";
 
+import File from "../models/File";
+import Course from "../models/Course";
+
 class CourseRoutes {
   router: Router;
   constructor() {
@@ -8,37 +11,42 @@ class CourseRoutes {
     this.routes();
   }
 
-  public async getCourse(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  public async getCourse( req: Request, res: Response, next: NextFunction ): Promise<void> {
     try {
-      res.status(201).json({ add: "hello" });
+      const allCourse = await Course.find({});
+      res.status(201).json(allCourse);
     } catch (error) {
       next(createError(error));
     }
   }
 
-  public async addCourse(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  public async addCourse( req: Request, res: Response, next: NextFunction ): Promise<void> {
     const { coursename, lastModified } = req.body;
     try {
-      res.status(201).json({ add: "hello" });
+      const newCourse = await Course.create({ coursename, lastModified});
+      res.status(201).json(newCourse);
     } catch (error) {
       next(createError(error));
+    }
+  }
+
+  public async updateCourse(req: Request, res: Response, next: NextFunction): Promise<void>{
+    const { id } = req.params;
+    const { coursename } = req.body;
+    try {
+        const updatedCourse = await Course.findByIdAndUpdate(id,{ coursename })
+        res.status(200).json(updatedCourse);
+    } catch (error) {
+        next(createError(error));
     }
   }
 
   routes(): void {
     this.router.get("/", this.getCourse);
+    this.router.post("/",this.addCourse);
+    this.router.put("/:id",this.updateCourse);
   }
 }
 
 const courseRoutes = new CourseRoutes();
-courseRoutes.routes();
-
 export default courseRoutes.router;

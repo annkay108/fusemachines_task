@@ -6,8 +6,8 @@ import bodyParser from "body-parser";
 import path from "path";
 import cors from "cors";
 
-import indexRoutes from "./routes/indexRoutes";
 import courseRoutes from "./routes/courseRoutes";
+import fileRoutes from "./routes/fileRoutes";
 
 dotenv.config();
 
@@ -36,6 +36,7 @@ class Server {
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({extended: false}));
     this.app.use(express.static(path.join(__dirname, 'public')));
+    console.log(__dirname);
 
     // CORS MIDDLEWARE SETUP
     this.app.use(
@@ -47,8 +48,8 @@ class Server {
   }
 
   public routes(): void {
-    this.app.use("/", indexRoutes);
     this.app.use("/course",courseRoutes);
+    this.app.use("/file",fileRoutes);
   }
 
   public start(): void {
