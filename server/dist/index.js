@@ -9,8 +9,9 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const morgan_1 = __importDefault(require("morgan"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const path_1 = __importDefault(require("path"));
-// import cors from "cors";
+const cors_1 = __importDefault(require("cors"));
 const indexRoutes_1 = __importDefault(require("./routes/indexRoutes"));
+const courseRoutes_1 = __importDefault(require("./routes/courseRoutes"));
 dotenv_1.default.config();
 class Server {
     constructor() {
@@ -23,7 +24,6 @@ class Server {
         mongoose_1.default.connect(process.env.MONGODB_URI, {
             keepAlive: true,
             useNewUrlParser: true,
-            reconnectTries: Number.MAX_VALUE,
             useUnifiedTopology: true
         })
             .then(() => console.log("Connected to database"))
@@ -35,10 +35,15 @@ class Server {
         this.app.use(body_parser_1.default.json());
         this.app.use(body_parser_1.default.urlencoded({ extended: false }));
         this.app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
+        // CORS MIDDLEWARE SETUP
+        this.app.use(cors_1.default({
+            credentials: true,
+            origin: [process.env.PUBLIC_DOMAIN]
+        }));
     }
     routes() {
-        const router = express_1.default.Router();
         this.app.use("/", indexRoutes_1.default);
+        this.app.use("/course", courseRoutes_1.default);
     }
     start() {
         this.app.listen(this.app.get("port"), () => {

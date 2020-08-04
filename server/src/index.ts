@@ -4,9 +4,10 @@ import dotenv from 'dotenv';
 import logger from "morgan";
 import bodyParser from "body-parser";
 import path from "path";
-// import cors from "cors";
+import cors from "cors";
 
 import indexRoutes from "./routes/indexRoutes";
+import courseRoutes from "./routes/courseRoutes";
 
 dotenv.config();
 
@@ -22,7 +23,6 @@ class Server {
     mongoose.connect(process.env.MONGODB_URI, {
       keepAlive: true,
       useNewUrlParser: true,
-      reconnectTries: Number.MAX_VALUE,
       useUnifiedTopology: true
     })
     .then(()=>console.log("Connected to database"))
@@ -36,12 +36,19 @@ class Server {
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({extended: false}));
     this.app.use(express.static(path.join(__dirname, 'public')));
+
+    // CORS MIDDLEWARE SETUP
+    this.app.use(
+      cors({
+        credentials: true,
+        origin: [process.env.PUBLIC_DOMAIN]
+      }),
+    );
   }
 
   public routes(): void {
-    const router: express.Router = express.Router();
-
     this.app.use("/", indexRoutes);
+    this.app.use("/course",courseRoutes);
   }
 
   public start(): void {
@@ -50,5 +57,6 @@ class Server {
     });
   }
 }
+
 const server = new Server();
 server.start();
