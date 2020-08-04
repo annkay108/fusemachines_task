@@ -1,11 +1,33 @@
 import express from "express";
-// Create a new express app instance
-const app: express.Application = express();
+import mongoose from "mongoose";
+// import logger from "morgan";
+// import cors from "cors";
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+import indexRoutes from "./routes/indexRoutes";
 
-app.listen(3000, () => {
-  console.log("App is listening on port 3000!");
-});
+class Server{
+  public app: express.Application;
+  constructor(){
+    this.app = express();
+    this.config();
+    this.routes();
+  }
+  public config(): void{
+    // Setting the port value
+    this.app.set('port', process.env.PORT||3000);
+  }
+
+  public routes():void{
+    const router: express.Router = express.Router();
+
+    this.app.use('/',indexRoutes);
+  }
+
+  public start():void{
+    this.app.listen(this.app.get('port'),()=>{
+      console.log('Server is listening on port', this.app.get('port'));
+    });
+  }
+}
+const server = new Server();
+server.start();

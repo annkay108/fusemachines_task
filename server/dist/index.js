@@ -4,12 +4,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-// Create a new express app instance
-const app = express_1.default();
-app.get("/", (req, res) => {
-    res.send("Hello World!");
-});
-app.listen(3000, () => {
-    console.log("App is listening on port 3000!");
-});
+// import logger from "morgan";
+// import cors from "cors";
+const indexRoutes_1 = __importDefault(require("./routes/indexRoutes"));
+class Server {
+    constructor() {
+        this.app = express_1.default();
+        this.config();
+        this.routes();
+    }
+    config() {
+        // Setting the port value
+        this.app.set('port', process.env.PORT || 3000);
+    }
+    routes() {
+        const router = express_1.default.Router();
+        this.app.use('/', indexRoutes_1.default);
+    }
+    start() {
+        this.app.listen(this.app.get('port'), () => {
+            console.log('Server is listening on port', this.app.get('port'));
+        });
+    }
+}
+const server = new Server();
+server.start();
 //# sourceMappingURL=index.js.map
