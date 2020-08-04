@@ -25,13 +25,25 @@ class FileRoute{
         try {
             const { courseId } = req.params;
             const filesArr:any = req.files;
+            console.log("length",filesArr.length);
+            console.log("filesArr", filesArr);
             const { lastModified, dateAdded} = req.body;
 
             for (const i of filesArr){
-                const newFile = await File.create({ lastModified, dateAdded, fileUri: i.destination})
+                const newFile = await (await File.create({ lastModified, dateAdded, fileUri: i.destination, courseId})).populate("courseId");
                 const addCourseFile = await Course.findByIdAndUpdate(courseId,{lastModified, $push:{courseFile: newFile._id}}).populate('newFile');
-                res.status(201).json({newFile, addCourseFile});
             }
+            res.status(200).json(filesArr.length+"file added")
+        } catch (error) {
+            next(createError(error));
+        }
+    }
+
+    public async getCourseFiles(req: Request, res: Response, next: NextFunction):Promise<void>{
+        try {
+            const { courseId } = req.params;
+            const courseFiles = await File.find({ courseId });
+            res.status(200).json(courseFiles);
         } catch (error) {
             next(createError(error));
         }
@@ -40,6 +52,7 @@ class FileRoute{
     routes(): void{
         this.router.get("/", this.getAllFile);
         this.router.post("/:courseId", upload, this.addFile);
+        this.router.get("/:courseId",this.getCourseFiles);
     }
 }
 

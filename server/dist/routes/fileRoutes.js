@@ -38,12 +38,26 @@ class FileRoute {
             try {
                 const { courseId } = req.params;
                 const filesArr = req.files;
+                console.log("length", filesArr.length);
+                console.log("filesArr", filesArr);
                 const { lastModified, dateAdded } = req.body;
                 for (const i of filesArr) {
-                    const newFile = yield File_1.default.create({ lastModified, dateAdded, fileUri: i.destination });
+                    const newFile = yield (yield File_1.default.create({ lastModified, dateAdded, fileUri: i.destination, courseId })).populate("courseId");
                     const addCourseFile = yield Course_1.default.findByIdAndUpdate(courseId, { lastModified, $push: { courseFile: newFile._id } }).populate('newFile');
-                    res.status(201).json({ newFile, addCourseFile });
                 }
+                res.status(200).json(filesArr.length + "file added");
+            }
+            catch (error) {
+                next(http_errors_1.default(error));
+            }
+        });
+    }
+    getCourseFiles(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { courseId } = req.params;
+                const courseFiles = yield File_1.default.find({ courseId });
+                res.status(200).json(courseFiles);
             }
             catch (error) {
                 next(http_errors_1.default(error));
@@ -53,6 +67,7 @@ class FileRoute {
     routes() {
         this.router.get("/", this.getAllFile);
         this.router.post("/:courseId", multerConfig_1.default, this.addFile);
+        this.router.get("/:courseId", this.getCourseFiles);
     }
 }
 const fileRoutes = new FileRoute();
