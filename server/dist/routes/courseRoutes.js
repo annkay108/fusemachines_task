@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const http_errors_1 = __importDefault(require("http-errors"));
+const File_1 = __importDefault(require("../models/File"));
 const Course_1 = __importDefault(require("../models/Course"));
 class CourseRoutes {
     constructor() {
@@ -56,10 +57,28 @@ class CourseRoutes {
             }
         });
     }
+    deleteCourse(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.params;
+            try {
+                const deleteThisCourse = yield Course_1.default.findById(id);
+                const deleteCourseFile = deleteThisCourse.courseFile;
+                for (const i of deleteCourseFile) {
+                    yield File_1.default.findByIdAndRemove(i);
+                }
+                yield Course_1.default.findByIdAndRemove(id);
+                res.status(200).json("deleted");
+            }
+            catch (error) {
+                next(http_errors_1.default(error));
+            }
+        });
+    }
     routes() {
         this.router.get("/", this.getCourse);
         this.router.post("/", this.addCourse);
         this.router.put("/:id", this.updateCourse);
+        this.router.delete("/:id", this.deleteCourse);
     }
 }
 const courseRoutes = new CourseRoutes();

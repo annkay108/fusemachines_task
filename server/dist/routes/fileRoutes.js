@@ -22,6 +22,17 @@ class FileRoute {
         this.router = express_1.Router();
         this.routes();
     }
+    getAllFile(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const allFile = yield File_1.default.find({});
+                res.status(201).json(allFile);
+            }
+            catch (error) {
+                next(http_errors_1.default(error));
+            }
+        });
+    }
     addFile(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -29,7 +40,7 @@ class FileRoute {
                 const filesArr = req.files;
                 const { lastModified, dateAdded } = req.body;
                 for (const i of filesArr) {
-                    const newFile = yield File_1.default.create({ lastModified, dateAdded, destination: i.destination });
+                    const newFile = yield File_1.default.create({ lastModified, dateAdded, fileUri: i.destination });
                     const addCourseFile = yield Course_1.default.findByIdAndUpdate(courseId, { lastModified, $push: { courseFile: newFile._id } }).populate('newFile');
                     res.status(201).json({ newFile, addCourseFile });
                 }
@@ -40,6 +51,7 @@ class FileRoute {
         });
     }
     routes() {
+        this.router.get("/", this.getAllFile);
         this.router.post("/:courseId", multerConfig_1.default, this.addFile);
     }
 }

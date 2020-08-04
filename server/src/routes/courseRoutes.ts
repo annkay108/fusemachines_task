@@ -41,10 +41,26 @@ class CourseRoutes {
     }
   }
 
+  public async deleteCourse(req: Request, res: Response, next: NextFunction): Promise<void>{
+    const { id } = req.params;
+    try {
+        const deleteThisCourse: any = await Course.findById(id);
+        const deleteCourseFile = deleteThisCourse.courseFile;
+        for(const i of deleteCourseFile){
+            await File.findByIdAndRemove(i);
+        }
+        await Course.findByIdAndRemove(id);
+        res.status(200).json("deleted");
+    } catch (error) {
+        next(createError(error));
+    }
+  }
+
   routes(): void {
     this.router.get("/", this.getCourse);
     this.router.post("/",this.addCourse);
     this.router.put("/:id",this.updateCourse);
+    this.router.delete("/:id",this.deleteCourse);
   }
 }
 

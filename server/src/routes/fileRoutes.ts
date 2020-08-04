@@ -12,6 +12,15 @@ class FileRoute{
         this.routes();
     }
 
+    public async getAllFile (req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const allFile = await File.find({});
+            res.status(201).json(allFile);
+        } catch (error) {
+            next(createError(error));
+        }
+    }
+
     public async addFile(req: Request, res: Response, next: NextFunction):Promise<void> {
         try {
             const { courseId } = req.params;
@@ -19,7 +28,7 @@ class FileRoute{
             const { lastModified, dateAdded} = req.body;
 
             for (const i of filesArr){
-                const newFile = await File.create({ lastModified, dateAdded, destination: i.destination})
+                const newFile = await File.create({ lastModified, dateAdded, fileUri: i.destination})
                 const addCourseFile = await Course.findByIdAndUpdate(courseId,{lastModified, $push:{courseFile: newFile._id}}).populate('newFile');
                 res.status(201).json({newFile, addCourseFile});
             }
@@ -29,6 +38,7 @@ class FileRoute{
     }
 
     routes(): void{
+        this.router.get("/", this.getAllFile);
         this.router.post("/:courseId", upload, this.addFile);
     }
 }
