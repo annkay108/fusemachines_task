@@ -13,16 +13,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const http_errors_1 = __importDefault(require("http-errors"));
+const File_1 = __importDefault(require("../models/File"));
+const Course_1 = __importDefault(require("../models/Course"));
 const multerConfig_1 = __importDefault(require("../config/multerConfig"));
 class FileRoute {
     constructor() {
         this.router = express_1.Router();
         this.routes();
     }
-    addFile(req, res) {
+    addFile(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const imageUrl = req.files;
-            res.status(201).json(imageUrl);
+            try {
+                const { courseId } = req.params;
+                const filesArr = req.files;
+                const { lastModified, dateAdded } = req.body;
+                for (const i of filesArr) {
+                    const newFile = yield File_1.default.create({ lastModified, dateAdded, destination: i.destination });
+                    const addCourseFile = yield Course_1.default.findByIdAndUpdate(courseId, { lastModified, $push: { courseFile: newFile._id } }).populate('newFile');
+                    res.status(201).json({ newFile, addCourseFile });
+                }
+            }
+            catch (error) {
+                next(http_errors_1.default(error));
+            }
         });
     }
     routes() {

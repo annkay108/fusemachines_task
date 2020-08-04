@@ -2,6 +2,7 @@ import { Router, Request, Response, NextFunction } from "express";
 import createError from "http-errors";
 
 import File from "../models/File";
+import Course from "../models/Course";
 import upload from "../config/multerConfig";
 
 class FileRoute{
@@ -11,9 +12,20 @@ class FileRoute{
         this.routes();
     }
 
-    public async addFile(req: Request, res: Response):Promise<void>{
-        const imageUrl = req.files;
-        res.status(201).json(imageUrl);
+    public async addFile(req: Request, res: Response, next: NextFunction):Promise<void> {
+        try {
+            const { courseId } = req.params;
+            const filesArr:any = req.files;
+            const { lastModified, dateAdded} = req.body;
+
+            for (const i of filesArr){
+                const newFile = await File.create({ lastModified, dateAdded, destination: i.destination})
+                const addCourseFile = await Course.findByIdAndUpdate(courseId,{lastModified, $push:{courseFile: newFile._id}}).populate('newFile');
+                res.status(201).json({newFile, addCourseFile});
+            }
+        } catch (error) {
+            next(createError(error));
+        }
     }
 
     routes(): void{
