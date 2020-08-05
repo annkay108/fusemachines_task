@@ -3,8 +3,8 @@ import { Schema, model } from "mongoose";
 const ListSchema = new Schema({
   courseId: { type: Schema.Types.ObjectId, ref: "Course" },
   fileUri: { type: String, required: true},
-  lastModified: { type: Date, default: Date.now },
-  dateAdded: { type: Date, default: Date.now },
+  lastModified: { type: Date },
+  dateAdded: { type: Date },
   fileName: { type: String, required: true }
 });
 
