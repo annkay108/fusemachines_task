@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { Button } from "react-bootstrap";
 
 import SideBar from "../components/Sidebar";
 import fileService from "../services/file";
+import AddFile from "../components/AddFile";
 
 interface IFile{
     _id: string,
@@ -13,18 +15,18 @@ interface IFile{
 }
 
 const Files = (props:any) => {
-    const [courseId, setcourseId] =useState<string>(props.match.params.id);
     const [fileArr, setFileArr] = useState<IFile[]|null>(null);
+    const [ modalShow, setModalShow ] = useState(false);
 
     useEffect(()=>{
-        fileService.getListOfFilesByCourseId(courseId)
+        fileService.getListOfFilesByCourseId(props.match.params.id)
         .then(data=> setFileArr(data))
         .catch(err =>{ throw err })
     },[])
 
     return (
         <div>
-            <SideBar courseId={courseId}/>
+            <SideBar courseId={props.match.params.id}/>
             <div>
                 {
                     fileArr?
@@ -40,6 +42,13 @@ const Files = (props:any) => {
                     :null
                 }
             </div>
+            <Button variant="primary" onClick={() => setModalShow(true)}>
+                Add File
+            </Button>
+            <AddFile 
+                show={modalShow}
+                onHide={() => setModalShow(false)}
+            />
         </div>
     )
 }

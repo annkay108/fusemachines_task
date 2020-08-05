@@ -1,16 +1,25 @@
 import React, { useState } from 'react';
 import { Modal } from "react-bootstrap";
 
+import courseService from "../services/course";
+
 const AddCourse = (props: any) => {
-    const [coursname, setCoursename] = useState<string>("");
-    const [lastModified, setLastModified] = useState<Date>(new Date());
+    const [coursename, setCoursename] = useState<string>("");
+    const [lastModified, setLastModified] = useState<string>(new Date().toISOString().slice(0,10));
 
     const handleFormSubmit = (event:any ) =>{
         event.preventDefault();
+        setLastModified(new Date().toISOString().slice(0,10))
+        const newCourse = { coursename, lastModified}
+        courseService.addCourse (newCourse)
+        .then(data => props.updatelist())
+        .catch(err =>{throw err})
+        props.onHide();
     }
 
     const handleChange = (event: any) =>{
-        
+        const { value } = event.target;
+        setCoursename(value);
     }
 
     return (

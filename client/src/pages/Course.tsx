@@ -9,7 +9,7 @@ interface ICourse{
     _id: string,
     courseFile: Array<string>,
     coursename: string,
-    lastModified: Date
+    lastModified: string
 }
 
 const Course = () => {
@@ -22,6 +22,20 @@ const Course = () => {
         .catch(err => {throw err})
     },[]);
 
+    const updateCourseList = ()=>{
+        courseService.getAllCourse()
+        .then(data => setCourse(data))
+        .catch(err => {throw err})
+    }
+
+    const handleDelete = (courseId: string)=>{
+        if(window.confirm("Are you sure you want to delete it?")){
+            courseService.deleteCourse(courseId)
+            .then(data => updateCourseList())
+            .catch(err => {throw err})
+        }
+    }
+
     return (
         <div>
             <div>
@@ -31,9 +45,21 @@ const Course = () => {
                     courseArr.map(el=>{
                         return(
                             <div key={el._id}>
+                                <div className="dropdown">
                                 <Link to = {`/course/${el._id}`}>
                                     {el.coursename}
                                 </Link>
+                                {
+                                    el.lastModified.slice(0,10)
+                                }
+                                <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Option
+                                </button>
+                                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <Link className="dropdown-item" to = "/course" onClick={()=>handleDelete(el._id)}>Delete</Link>
+                                    <Link className="dropdown-item" to = "/" >Edit</Link>
+                                </div>
+                            </div>
                             </div>
                         )
                     }):<h1>No courses</h1>
@@ -46,6 +72,7 @@ const Course = () => {
             <AddCourse 
                 show={modalShow}
                 onHide={() => setModalShow(false)}
+                updatelist ={()=> updateCourseList()}
             />
         </div>
     )
