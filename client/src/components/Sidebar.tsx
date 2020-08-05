@@ -1,15 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Navbar = () => {
+const Sidebar = () => {
     return (
         <nav>
-            <Link to= "/">
-                <h4> Home </h4>
+            <Link to= "/course">
+                <h4> Course </h4>
             </Link>
-            <h4> Avatar </h4>
         </nav>
     )
 }
 
-export default Navbar;
+export default Sidebar;
