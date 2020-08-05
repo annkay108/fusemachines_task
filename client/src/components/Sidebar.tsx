@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Sidebar = () => {
+const Sidebar = (props:any) => {
     return (
         <nav>
-            <Link to= "/course">
-                <h4> Course </h4>
+            <Link to= {`/course/${props.courseId}`}>
+                <h4> Files </h4>
             </Link>
         </nav>
     )

@@ -12,14 +12,13 @@ interface ICourse{
 
 const Course = () => {
     const [ courseArr , setCourse ] = useState<ICourse[]|null>(null);
+
     useEffect(()=>{
         courseService.getAllCourse()
-        .then(data => {
-            console.log("data",data)
-            setCourse(data)
-        })
+        .then(data => setCourse(data))
         .catch(err => {throw err})
     },[]);
+    
     return (
         <div>
             {
