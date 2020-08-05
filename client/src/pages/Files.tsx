@@ -24,6 +24,12 @@ const Files = (props:any) => {
         .catch(err =>{ throw err })
     },[])
 
+    const updateCourseList = ()=>{
+        fileService.getListOfFilesByCourseId(props.match.params.id)
+        .then(data => setFileArr(data))
+        .catch(err => {throw err})
+    }
+
     return (
         <div>
             <SideBar courseId={props.match.params.id}/>
@@ -46,8 +52,10 @@ const Files = (props:any) => {
                 Add File
             </Button>
             <AddFile 
+                courseId={props.match.params.id}
                 show={modalShow}
                 onHide={() => setModalShow(false)}
+                updatelist ={()=>updateCourseList()}
             />
         </div>
     )

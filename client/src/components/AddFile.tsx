@@ -34,43 +34,57 @@ const baseStyle = {
   };
 
 const AddFile = (props: any) => {
-    // const [coursename, setCoursename] = useState<string>("");
-    // const [lastModified, setLastModified] = useState<Date>(new Date());
+    // const [allFile, setFiles] = useState<any>(null);
+    // const [lastModified, setLastModified] = useState<Date>(new Date().toISOString());
+    // const [addedDate, setAddedDate] = useState<Date>(new Date());
 
-    // const handleFormSubmit = (event:any ) =>{
-    //     event.preventDefault();
-    //     props.onHide();
-    // }
+    const handleFileUpload = () =>{
+        let dateNow = new Date().toISOString();
+        // setLastModified(date);
+        // setAddedDate(date);
+        let formdata = new FormData();
+        acceptedFiles.map((file,index)=>{
+            formdata.append(`file`,file)
+        })
+        formdata.append("lastModified",dateNow);
+        formdata.append("dateAdded",dateNow);
+        console.log("append formdata",formdata);
+        fileService.addFiles(formdata, props.courseId)
+        .then((data)=>props.updatelist())
+        .catch(err=>{throw err})
 
-    // const handleChange = (event: any) =>{
-    //     const { value } = event.target;
-    //     setCoursename(value);
-    // }
+        props.onHide();
+    }
     const {
-        acceptedFiles,
-        getRootProps,
-        getInputProps,
-        isDragActive,
-        isDragAccept,
-        isDragReject
-      } = useDropzone({accept: 'image/*'});
-    
-      const files = acceptedFiles.map((file:any) => (
-        <li key={file.path}>
-          {file.path} - {file.size} bytes
-        </li>
-      ));
+            acceptedFiles,
+            getRootProps,
+            getInputProps,
+            isDragActive,
+            isDragAccept,
+            isDragReject
+        } = useDropzone();
+        
+        const files = acceptedFiles.map((file:any) => (
+            <li key={file.path}>
+            {file.path} - {
+                parseInt(Math.round(file.size/1000/1000).toFixed(2))>=1?
+                    Math.round(file.size/1000/1000).toFixed(2)+" MB"
+                    :Math.round(file.size/1000).toFixed(2) +" KB"
+            }
+            </li>
+        ));
+        // acceptedfiles property lastModified, name, path, size, type
 
-      const style:any = useMemo(() => ({
-        ...baseStyle,
-        ...(isDragActive ? activeStyle : {}),
-        ...(isDragAccept ? acceptStyle : {}),
-        ...(isDragReject ? rejectStyle : {})
-      }), [
-        isDragActive,
-        isDragReject,
-        isDragAccept
-      ]);
+        const style:any = useMemo(() => ({
+            ...baseStyle,
+            ...(isDragActive ? activeStyle : {}),
+            ...(isDragAccept ? acceptStyle : {}),
+            ...(isDragReject ? rejectStyle : {})
+        }), [
+            isDragActive,
+            isDragReject,
+            isDragAccept
+        ]);
 
     return (
         <Modal
@@ -86,10 +100,12 @@ const AddFile = (props: any) => {
             </Modal.Header>
             <Modal.Body>
                 <div className="container">
-                    <div {...getRootProps({style})}>
-                        <input {...getInputProps()} />
-                        <p>Drag 'n' drop some files here, or click to select files</p>
-                    </div>
+                    <form encType= "multipart/form-data">
+                        <div {...getRootProps({style})}>
+                            <input {...getInputProps()} />
+                            <p>Drag 'n' drop some files here, or click to select files</p>
+                        </div>
+                    </form>
                     <aside>
                         <ul>{files}</ul>
                     </aside>
@@ -97,7 +113,7 @@ const AddFile = (props: any) => {
             </Modal.Body>
             <Modal.Footer>
                 <button type="button" className="btn btn-link" onClick={props.onHide}>Close</button>
-                <button type="button" className="btn btn-success" >Done</button>
+                <button type="button" className="btn btn-success" onClick={handleFileUpload} >Done</button>
             </Modal.Footer>
         </Modal>
     );
