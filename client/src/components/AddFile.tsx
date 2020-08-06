@@ -39,15 +39,25 @@ const AddFile = (props: any) => {
 
     const [error, setError] = useState<boolean>(false);
     
-    const handleRemoveList = (updatedList:File[])=>{
+    const handleRemoveList = (updatedList:File[],updatedFileName:string[][])=>{
         arrUpdatedList = updatedList;
+        arrUpdatedFileName = updatedFileName;
     }
     
+    const onRenameFile = (updatedFileName:string[][]) =>{
+        arrUpdatedFileName = updatedFileName;
+    }
+
+    const handleClose = () =>{
+        acceptedFiles.length = 0;
+        props.onHide();
+    }
+
     const handleFileUpload = () =>{
         let dateNow = new Date().toISOString();
         let formdata = new FormData();
-        arrUpdatedList.map((file)=>{
-            formdata.append(`file`,file)
+        arrUpdatedList.map((file,index)=>{
+            formdata.append(`file`,file,arrUpdatedFileName[index][0]+arrUpdatedFileName[index][1])
         })
         formdata.append("lastModified",dateNow);
         formdata.append("dateAdded",dateNow);
@@ -69,6 +79,7 @@ const AddFile = (props: any) => {
     } = useDropzone();
     
     let arrUpdatedList = acceptedFiles;
+    let arrUpdatedFileName:string[][] = [];
         // acceptedfiles property lastModified, name, path, size, type
 
         const style:any = useMemo(() => ({
@@ -105,15 +116,14 @@ const AddFile = (props: any) => {
                     <aside>
                         {acceptedFiles.length===0?
                                 null:
-                                <UpdateFileListInput onRemoveFile={handleRemoveList} files={acceptedFiles}/>}
+                                <UpdateFileListInput onRemoveFile={handleRemoveList} onRenameFile={onRenameFile} files={acceptedFiles}/>}
                     </aside>
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <button type="button" className="btn btn-link" onClick={props.onHide}>Close</button>
+                <button type="button" className="btn btn-link" onClick={handleClose}>Close</button>
                 <button type="button" className="btn btn-success" onClick={handleFileUpload} >Done</button>
             </Modal.Footer>
-            {console.log("add file rendering",acceptedFiles)}
         </Modal>
     );
 }
