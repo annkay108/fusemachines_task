@@ -34,34 +34,55 @@ const baseStyle = {
     borderColor: '#ff1744'
   };
 
+
 const AddFile = (props: any) => {
 
+    const [error, setError] = useState<boolean>(false);
+
+    const checkError = (file:File) => {
+        if(file.size>500) setError(true)
+    }
+
+    
+    const handleRemoveList = (updatedFileList:File[])=>{
+        updatedFiles = updatedFileList
+        console.log("updateFiles removeList",updatedFiles)
+    }
+    
     const handleFileUpload = () =>{
-        let dateNow = new Date().toISOString();
-        let formdata = new FormData();
-        acceptedFiles.map((file,index)=>{
-            formdata.append(`file`,file)
+        acceptedFiles.map(file=>{
+            checkError(file);
         })
-        formdata.append("lastModified",dateNow);
-        formdata.append("dateAdded",dateNow);
-        console.log("append formdata",formdata);
-        fileService.addFiles(formdata, props.courseId)
-        .then((data)=>props.updatelist())
-        .catch(err=>{throw err})
-        props.onHide();
+        if(!error)
+        {
+            let dateNow = new Date().toISOString();
+            let formdata = new FormData();
+            updatedFiles.map((file,index)=>{
+                formdata.append(`file`,file)
+            })
+            formdata.append("lastModified",dateNow);
+            formdata.append("dateAdded",dateNow);
+            
+            fileService.addFiles(formdata, props.courseId)
+            .then((data)=>props.updatelist())
+            .catch(err=>{throw err})
+            props.onHide();
+        }
     }
     
     const {
-            acceptedFiles,
-            getRootProps,
-            getInputProps,
-            isDragActive,
-            isDragAccept,
-            isDragReject
-        } = useDropzone();
-        
-        const files = acceptedFiles.map((file:any, index:number) => (
-            <li key={index}>
+        acceptedFiles,
+        getRootProps,
+        getInputProps,
+        isDragActive,
+        isDragAccept,
+        isDragReject
+    } = useDropzone();
+    
+    let updatedFiles = acceptedFiles;
+
+    const files = acceptedFiles.map((file:any, index:number) => (
+        <li key={index}>
             {file.path} - {
                 parseInt(Math.round(file.size/1000/1000).toFixed(2))>=1?
                     Math.round(file.size/1000/1000).toFixed(2)+" MB"
@@ -105,8 +126,9 @@ const AddFile = (props: any) => {
                     <aside>
                         {acceptedFiles.length===0?
                                 <ul>{files}</ul>:
-                                <UpdateFileListInput files={acceptedFiles}/>}
+                                <UpdateFileListInput onRemoveFile={handleRemoveList} files={acceptedFiles}/>}
                     </aside>
+                    {error?<p>Resolve the issue first</p>:null}
                 </div>
             </Modal.Body>
             <Modal.Footer>
