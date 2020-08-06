@@ -24,7 +24,7 @@ const UpdateFileListInput = (props:any) => {
             ))
             }
             {console.log('render updateFile')}
-        </div>
+
     )
 }
 export default UpdateFileListInput;
