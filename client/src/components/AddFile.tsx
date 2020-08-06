@@ -4,6 +4,7 @@ import {useDropzone} from 'react-dropzone';
 
 
 import fileService from "../services/file";
+import UpdateFileListInput from "./UpdateFileListInput";
 
 const baseStyle = {
     flex: 1,
@@ -34,14 +35,9 @@ const baseStyle = {
   };
 
 const AddFile = (props: any) => {
-    // const [allFile, setFiles] = useState<any>(null);
-    // const [lastModified, setLastModified] = useState<Date>(new Date().toISOString());
-    // const [addedDate, setAddedDate] = useState<Date>(new Date());
 
     const handleFileUpload = () =>{
         let dateNow = new Date().toISOString();
-        // setLastModified(date);
-        // setAddedDate(date);
         let formdata = new FormData();
         acceptedFiles.map((file,index)=>{
             formdata.append(`file`,file)
@@ -52,9 +48,9 @@ const AddFile = (props: any) => {
         fileService.addFiles(formdata, props.courseId)
         .then((data)=>props.updatelist())
         .catch(err=>{throw err})
-
         props.onHide();
     }
+    
     const {
             acceptedFiles,
             getRootProps,
@@ -64,8 +60,8 @@ const AddFile = (props: any) => {
             isDragReject
         } = useDropzone();
         
-        const files = acceptedFiles.map((file:any) => (
-            <li key={file.path}>
+        const files = acceptedFiles.map((file:any, index:number) => (
+            <li key={index}>
             {file.path} - {
                 parseInt(Math.round(file.size/1000/1000).toFixed(2))>=1?
                     Math.round(file.size/1000/1000).toFixed(2)+" MB"
@@ -107,7 +103,9 @@ const AddFile = (props: any) => {
                         </div>
                     </form>
                     <aside>
-                        <ul>{files}</ul>
+                        {acceptedFiles.length===0?
+                                <ul>{files}</ul>:
+                                <UpdateFileListInput files={acceptedFiles}/>}
                     </aside>
                 </div>
             </Modal.Body>
