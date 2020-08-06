@@ -3,12 +3,12 @@ import React, { useState, Component } from 'react'
 const UpdateFileListInput = (props:any) => {
 
     const [allFiles, setAllFiles] = useState<File[]>(props.files);
-
-    const handleRemoveClick = (index:number)=>{
+    console.log("props.files",props.files)
+    
+    const handleRemoveClick = async (index:number)=>{
         allFiles.splice(index,1)
         props.onRemoveFile([...allFiles])
         setAllFiles([...allFiles]);
-        console.log(allFiles);
     }
 
     const handleInputClick = ()=>{
@@ -35,6 +35,7 @@ const UpdateFileListInput = (props:any) => {
                 </li>
             ))
             }
+            {console.log("update file render")}
         </div>
     )
 }

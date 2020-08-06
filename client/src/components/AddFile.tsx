@@ -38,36 +38,25 @@ const baseStyle = {
 const AddFile = (props: any) => {
 
     const [error, setError] = useState<boolean>(false);
-
-    const checkError = (file:File) => {
-        if(file.size>500) setError(true)
-    }
-
     
-    const handleRemoveList = (updatedFileList:File[])=>{
-        updatedFiles = updatedFileList
-        console.log("updateFiles removeList",updatedFiles)
+    const handleRemoveList = (updatedList:File[])=>{
+        arrUpdatedList = updatedList;
     }
     
     const handleFileUpload = () =>{
-        acceptedFiles.map(file=>{
-            checkError(file);
+        let dateNow = new Date().toISOString();
+        let formdata = new FormData();
+        arrUpdatedList.map((file)=>{
+            formdata.append(`file`,file)
         })
-        if(!error)
-        {
-            let dateNow = new Date().toISOString();
-            let formdata = new FormData();
-            updatedFiles.map((file,index)=>{
-                formdata.append(`file`,file)
-            })
-            formdata.append("lastModified",dateNow);
-            formdata.append("dateAdded",dateNow);
-            
-            fileService.addFiles(formdata, props.courseId)
-            .then((data)=>props.updatelist())
-            .catch(err=>{throw err})
-            props.onHide();
-        }
+        formdata.append("lastModified",dateNow);
+        formdata.append("dateAdded",dateNow);
+        
+        fileService.addFiles(formdata, props.courseId)
+        .then((data)=>props.updatelist())
+        .catch(err=>{throw err})
+        acceptedFiles.length = 0
+        props.onHide();
     }
     
     const {
@@ -79,17 +68,7 @@ const AddFile = (props: any) => {
         isDragReject
     } = useDropzone();
     
-    let updatedFiles = acceptedFiles;
-
-    const files = acceptedFiles.map((file:any, index:number) => (
-        <li key={index}>
-            {file.path} - {
-                parseInt(Math.round(file.size/1000/1000).toFixed(2))>=1?
-                    Math.round(file.size/1000/1000).toFixed(2)+" MB"
-                    :Math.round(file.size/1000).toFixed(2) +" KB"
-            }
-            </li>
-        ));
+    let arrUpdatedList = acceptedFiles;
         // acceptedfiles property lastModified, name, path, size, type
 
         const style:any = useMemo(() => ({
@@ -125,16 +104,16 @@ const AddFile = (props: any) => {
                     </form>
                     <aside>
                         {acceptedFiles.length===0?
-                                <ul>{files}</ul>:
+                                null:
                                 <UpdateFileListInput onRemoveFile={handleRemoveList} files={acceptedFiles}/>}
                     </aside>
-                    {error?<p>Resolve the issue first</p>:null}
                 </div>
             </Modal.Body>
             <Modal.Footer>
                 <button type="button" className="btn btn-link" onClick={props.onHide}>Close</button>
                 <button type="button" className="btn btn-success" onClick={handleFileUpload} >Done</button>
             </Modal.Footer>
+            {console.log("add file rendering",acceptedFiles)}
         </Modal>
     );
 }
