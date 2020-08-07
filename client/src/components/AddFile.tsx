@@ -39,7 +39,7 @@ const AddFile = (props: any) => {
     
     const [arrUpdatedFileName, setUpdatedFileName] = useState<string[][]>([]);
     const [validationArr, setValidationArr] = useState<number[]>([]);
-        
+     
     const {
         acceptedFiles,
         getRootProps,
@@ -70,9 +70,13 @@ const AddFile = (props: any) => {
        setValidationArr(updatedValidationArr)
     }
 
+    // useEffect(() => {
+    //     setUpdateFile([...acceptedFiles])
+    // }, [])
+
     useEffect(() => {
-        setUpdateFile([...acceptedFiles])
-    }, [])
+        setUpdateFile([...updatedFileArr,...acceptedFiles])
+    }, [acceptedFiles])
 
     const handleFileUpload = () =>{
         let sum = validationArr.reduce((a,b)=>a+b,0)
@@ -128,14 +132,17 @@ const AddFile = (props: any) => {
                         </div>
                     </form>
                     <aside>
-                        {acceptedFiles.length===0?
+                        {
+                            acceptedFiles.length===0?
                                 null:
                                 <UpdateFileListInput 
                                     onValidation={updateValidationArr} 
                                     onRemoveFile={handleRemoveList} 
                                     onRenameFile={onRenameFile} 
-                                    files={acceptedFiles}
-                                />}
+                                    //files={acceptedFiles}
+                                    files={[...updatedFileArr,...acceptedFiles]}
+                                />
+                        }
                     </aside>
                 </div>
             </Modal.Body>
