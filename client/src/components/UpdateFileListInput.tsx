@@ -35,14 +35,9 @@ const UpdateFileListInput = (props:any) => {
     
     const checkForDuplicates = (files:File[], fileNamesExts:string[][])=>{
         let updatedValidation = [];
+        let checkType = ['application/pdf',"image/png","image/jpeg","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet","application/vnd.openxmlformats-officedocument.presentationml.presentation","application/vnd.openxmlformats-officedocument.wordprocessingml.document","application/x-ipynb+json"]
         for(let k of files){
-            if (k.type!=='application/pdf'&&
-                k.type!=="image/png"&&
-                k.type!=="image/jpeg"&&
-                k.type!=="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"&&
-                k.type!=="application/vnd.openxmlformats-officedocument.presentationml.presentation"&&
-                k.type!=="application/vnd.openxmlformats-officedocument.wordprocessingml.document"&&
-                k.type!=="application/x-ipynb+json" ) updatedValidation.push(1)
+            if (!checkType.includes(k.type)) updatedValidation.push(1)
             else if (k.size>50000000) updatedValidation.push(2)
             else updatedValidation.push(0)
         }

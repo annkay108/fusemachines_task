@@ -20,19 +20,19 @@ const baseStyle = {
     color: '#bdbdbd',
     outline: 'none',
     transition: 'border .24s ease-in-out'
-  };
+};
   
-  const activeStyle = {
+const activeStyle = {
     borderColor: '#2196f3'
-  };
-  
-  const acceptStyle = {
+};
+
+const acceptStyle = {
     borderColor: '#00e676'
-  };
-  
-  const rejectStyle = {
+};
+
+const rejectStyle = {
     borderColor: '#ff1744'
-  };
+};
 
 
 const AddFile = (props: any) => {
@@ -49,11 +49,9 @@ const AddFile = (props: any) => {
         isDragReject
     } = useDropzone();
     
-    // let arrUpdatedList = acceptedFiles;
     const [updatedFileArr, setUpdateFile] = useState<File[]>([]);
 
     const handleRemoveList = (updatedList:File[],updatedFileName:string[][])=>{
-        // arrUpdatedList = updatedList;
         setUpdateFile([...updatedList])
         setUpdatedFileName([...updatedFileName])
     }
@@ -64,7 +62,7 @@ const AddFile = (props: any) => {
 
     const handleClose = () =>{
         setUpdateFile([])
-        // acceptedFiles.length = 0;
+        acceptedFiles.length = 0;
         props.onHide();
     }
 
@@ -74,9 +72,6 @@ const AddFile = (props: any) => {
 
     useEffect(() => {
         setUpdateFile([...acceptedFiles])
-        // setUpdateFile([...updatedFileArr, ...acceptedFiles])
-        // console.log("useffect");
-        // console.log(updatedFileArr)
     }, [])
 
     const handleFileUpload = () =>{
@@ -99,18 +94,18 @@ const AddFile = (props: any) => {
         }
     }
 
-        // acceptedfiles property lastModified, name, path, size, type
+    // acceptedfiles property lastModified, name, path, size, type
 
-        const style:any = useMemo(() => ({
-            ...baseStyle,
-            ...(isDragActive ? activeStyle : {}),
-            ...(isDragAccept ? acceptStyle : {}),
-            ...(isDragReject ? rejectStyle : {})
-        }), [
-            isDragActive,
-            isDragReject,
-            isDragAccept
-        ]);
+    const style:any = useMemo(() => ({
+        ...baseStyle,
+        ...(isDragActive ? activeStyle : {}),
+        ...(isDragAccept ? acceptStyle : {}),
+        ...(isDragReject ? rejectStyle : {})
+    }), [
+        isDragActive,
+        isDragReject,
+        isDragAccept
+    ]);
 
     return (
         <Modal
@@ -135,7 +130,12 @@ const AddFile = (props: any) => {
                     <aside>
                         {acceptedFiles.length===0?
                                 null:
-                                <UpdateFileListInput onValidation={updateValidationArr} onRemoveFile={handleRemoveList} onRenameFile={onRenameFile} files={acceptedFiles}/>}
+                                <UpdateFileListInput 
+                                    onValidation={updateValidationArr} 
+                                    onRemoveFile={handleRemoveList} 
+                                    onRenameFile={onRenameFile} 
+                                    files={acceptedFiles}
+                                />}
                     </aside>
                 </div>
             </Modal.Body>
@@ -143,7 +143,6 @@ const AddFile = (props: any) => {
                 <button type="button" className="btn btn-link" onClick={handleClose}>Close</button>
                 <button type="button" className="btn btn-success" onClick={handleFileUpload} >Done</button>
             </Modal.Footer>
-            {console.log(updatedFileArr)}
         </Modal>
     );
 }
