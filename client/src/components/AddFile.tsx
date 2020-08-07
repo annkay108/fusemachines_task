@@ -73,11 +73,11 @@ const AddFile = (props: any) => {
     }
 
     useEffect(() => {
-        setUpdateFile([...acceptedFiles])
-        // setUpdateFile([...updatedFileArr, ...acceptedFiles])
+        // setUpdateFile([...acceptedFiles])
+        setUpdateFile([...updatedFileArr, ...acceptedFiles])
         // console.log("useffect");
         // console.log(updatedFileArr)
-    }, [])
+    }, [acceptedFiles])
 
     const handleFileUpload = () =>{
         let sum = validationArr.reduce((a,b)=>a+b,0)
@@ -133,9 +133,9 @@ const AddFile = (props: any) => {
                         </div>
                     </form>
                     <aside>
-                        {acceptedFiles.length===0?
+                        {updatedFileArr.length===0?
                                 null:
-                                <UpdateFileListInput onValidation={updateValidationArr} onRemoveFile={handleRemoveList} onRenameFile={onRenameFile} files={acceptedFiles}/>}
+                                <UpdateFileListInput onValidation={updateValidationArr} onRemoveFile={handleRemoveList} onRenameFile={onRenameFile} files={[...updatedFileArr]}/>}
                     </aside>
                 </div>
             </Modal.Body>
