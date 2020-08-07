@@ -62,10 +62,23 @@ class FileRoute {
             }
         });
     }
+    getFileById(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const getfile = yield File_1.default.findById({ _id: req.params.fileId });
+                const file = `${process.env.URI}${getfile.fileName}`;
+                res.status(200).download(file);
+            }
+            catch (error) {
+                next(http_errors_1.default(error));
+            }
+        });
+    }
     routes() {
         this.router.get("/", this.getAllFile);
         this.router.post("/:courseId", multerConfig_1.default, this.addFile);
         this.router.get("/:courseId", this.getCourseFiles);
+        this.router.get("/:fileId/download", this.getFileById);
     }
 }
 const fileRoutes = new FileRoute();

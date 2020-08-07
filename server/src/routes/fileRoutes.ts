@@ -47,10 +47,20 @@ class FileRoute{
         }
     }
 
+    public async getFileById (req: Request, res: Response, next: NextFunction):Promise<void>{
+        try {
+            const getfile:any = await File.findById({_id: req.params.fileId});
+            const file = `${process.env.URI}${getfile.fileName}`
+            res.status(200).download(file);
+        } catch (error) {
+            next(createError(error));
+        }
+    }
     routes(): void{
         this.router.get("/", this.getAllFile);
         this.router.post("/:courseId", upload, this.addFile);
         this.router.get("/:courseId",this.getCourseFiles);
+        this.router.get("/:fileId/download",this.getFileById);
     }
 }
 
