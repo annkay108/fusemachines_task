@@ -16,7 +16,7 @@ const UpdateFileListInput = (props:any) => {
     const handleRemoveClick = (index:number)=>{
         allFiles.splice(index,1)
         nameArr.splice(index,1)
-        const updatedValidation = checkForDuplicates(allFiles);
+        const updatedValidation = checkForDuplicates(allFiles,[...nameArr]);
         props.onRemoveFile([...allFiles],[...nameArr])
         setAllFiles([...allFiles]);
         setNameArr([...nameArr]);
@@ -28,12 +28,13 @@ const UpdateFileListInput = (props:any) => {
         nameArr[index][0] = e.target.value;
         setNameArr([...nameArr])
         props.onRenameFile([...nameArr])
-        const updatedValidation = checkForDuplicates(allFiles);
+        const updatedValidation = checkForDuplicates(allFiles,[...nameArr]);
+        console.log("fromonchange",updatedValidation)
+        props.onValidation([...updatedValidation])
         setValidation([...updatedValidation])
-        props.onValidation([...validation])
     }
     
-    const checkForDuplicates = (files:File[])=>{
+    const checkForDuplicates = (files:File[], fileNamesExts:string[][])=>{
         let updatedValidation = [];
         let checkType = ['application/pdf',"image/png","image/jpeg","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet","application/vnd.openxmlformats-officedocument.presentationml.presentation","application/vnd.openxmlformats-officedocument.wordprocessingml.document","application/x-ipynb+json"]
         for(let k of files){
@@ -45,8 +46,8 @@ const UpdateFileListInput = (props:any) => {
         let duplicates:string[] = [];
         let fileNames:string[] = [];
 
-        for (let j of files){
-            fileNames.push(j.name)
+        for (let j of fileNamesExts){
+            fileNames.push(j[0]+j[1])
         }
         for (let i = 0; i< fileNames.length; i++){
             if(duplicates.includes(fileNames[i])){
@@ -71,7 +72,7 @@ const UpdateFileListInput = (props:any) => {
             nameExt.push(ext)
             arrName.push(nameExt)
         }
-        validationArr = checkForDuplicates(allFiles)
+        validationArr = checkForDuplicates(allFiles,[...arrName])
         setNameArr([...arrName])
         setValidation([...validationArr])
         props.onRenameFile([...arrName])

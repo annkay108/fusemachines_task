@@ -68,6 +68,7 @@ const AddFile = (props: any) => {
 
     const updateValidationArr = (updatedValidationArr:number[])=>{
        setValidationArr(updatedValidationArr)
+       console.log("from updateFunction",updatedValidationArr)
     }
 
     // useEffect(() => {
@@ -80,6 +81,7 @@ const AddFile = (props: any) => {
 
     const handleFileUpload = () =>{
         let sum = validationArr.reduce((a,b)=>a+b,0)
+        console.log(validationArr,"validationArr")
         if(sum===0){
             let dateNow = new Date().toISOString();
             let formdata = new FormData();
