@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 
 import SideBar from "../components/Sidebar";
@@ -42,7 +41,7 @@ const Files = (props:any) => {
                             return(
                                 <div key={el._id}>
                                     {el.fileName}
-                                    <Link to={`/home/inferno/Documents/fusemachines_task/public/${el.fileName}`} target="_blank" download>Download</Link>
+                                    <a href={`localhost:5000/file/${el._id}/download`} target="_blank" download>Download</a>
                                 </div>
                             )
                         })

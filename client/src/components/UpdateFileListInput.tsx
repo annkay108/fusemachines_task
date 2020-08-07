@@ -49,7 +49,13 @@ const UpdateFileListInput = (props:any) => {
                                 ` (${Math.round(file.size/1000/1000).toFixed(2)} MB)`
                                 :` (${Math.round(file.size/1000).toFixed(2)} KB)`
                             }
-                            <button type="button" className="btn btn-link" onClick ={()=>handleRemoveClick(index)}>Remove</button>
+                            <button 
+                                type="button" 
+                                className="btn btn-link" 
+                                onClick ={()=>handleRemoveClick(index)}
+                            >
+                                Remove
+                            </button>
                             {error(file)}
                         </div>
                         :null
