@@ -4,27 +4,69 @@ const UpdateFileListInput = (props:any) => {
 
     const [allFiles, setAllFiles] = useState<File[]>(props.files);
     const [nameArr, setNameArr] = useState<string[][]>([]);
+    const [validation, setValidation] = useState<number[]>([]);
     
+    const inputValidationChecks:any = {
+        0:"no error",
+        1:"File type invalid",
+        2:"File size large",
+        3:"Duplicate name"
+    }
+
     const handleRemoveClick = (index:number)=>{
         allFiles.splice(index,1)
         nameArr.splice(index,1)
+        const updatedValidation = checkForDuplicates(allFiles,[...nameArr]);
         props.onRemoveFile([...allFiles],[...nameArr])
         setAllFiles([...allFiles]);
         setNameArr([...nameArr]);
+        props.onValidation([...updatedValidation])
+        setValidation([...updatedValidation])
     }
     
     const handleChange = (e:any, index:number)=>{
         nameArr[index][0] = e.target.value;
         setNameArr([...nameArr])
         props.onRenameFile([...nameArr])
+        const updatedValidation = checkForDuplicates(allFiles,[...nameArr]);
+        setValidation([...updatedValidation])
+        props.onValidation([...validation])
     }
+    
+    const checkForDuplicates = (files:File[], fileNamesExts:string[][])=>{
+        let updatedValidation = [];
+        for(let k of files){
+            if (k.type!=='application/pdf'&&
+                k.type!=="image/png"&&
+                k.type!=="image/jpeg"&&
+                k.type!=="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"&&
+                k.type!=="application/vnd.openxmlformats-officedocument.presentationml.presentation"&&
+                k.type!=="application/vnd.openxmlformats-officedocument.wordprocessingml.document"&&
+                k.type!=="application/x-ipynb+json" ) updatedValidation.push(1)
+            else if (k.size>50000000) updatedValidation.push(2)
+            else updatedValidation.push(0)
+        }
 
-    const error = (file:any)=>(
-        file.size>500?<div>big size</div>:null
-    )
+        let duplicates:string[] = [];
+        let fileNames:string[] = [];
+        for (let j of fileNamesExts){
+            fileNames.push(j[0])
+        }
+        for (let i = 0; i< fileNames.length; i++){
+            if(duplicates.includes(fileNames[i][0])){
+                if(updatedValidation[i]===0) updatedValidation[i]=3
+            }
+            else if (fileNames.lastIndexOf(fileNames[i])!==i){
+                duplicates.push(fileNames[i])
+                if(updatedValidation[i]===0) updatedValidation[i]=3
+            }
+        }
+        return updatedValidation;
+    }
 
     useEffect(()=>{
         let arrName = [];
+        let validationArr = [];
         for(let i of allFiles){
             let nameExt = []
             let name = i.name.slice(0,i.name.lastIndexOf("."))
@@ -33,7 +75,11 @@ const UpdateFileListInput = (props:any) => {
             nameExt.push(ext)
             arrName.push(nameExt)
         }
+        validationArr = checkForDuplicates(allFiles,[...arrName])
         setNameArr([...arrName])
+        setValidation([...validationArr])
+        props.onRenameFile([...arrName])
+        props.onValidation([...validationArr])
     },[])
 
     return (
@@ -56,7 +102,9 @@ const UpdateFileListInput = (props:any) => {
                             >
                                 Remove
                             </button>
-                            {error(file)}
+                            <div>
+                                {validation[index]===0?null:inputValidationChecks[validation[index]]}
+                            </div>
                         </div>
                         :null
                     }

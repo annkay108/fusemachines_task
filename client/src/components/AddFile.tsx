@@ -36,16 +36,17 @@ const baseStyle = {
 
 
 const AddFile = (props: any) => {
-
-    const [error, setError] = useState<boolean>(false);
     
+    const [arrUpdatedFileName, setUpdatedFileName] = useState<string[][]>([]);
+    const [validationArr, setValidationArr] = useState<number[]>([]);
+
     const handleRemoveList = (updatedList:File[],updatedFileName:string[][])=>{
         arrUpdatedList = updatedList;
-        arrUpdatedFileName = updatedFileName;
+        setUpdatedFileName([...updatedFileName])
     }
     
     const onRenameFile = (updatedFileName:string[][]) =>{
-        arrUpdatedFileName = updatedFileName;
+        setUpdatedFileName([...updatedFileName])
     }
 
     const handleClose = () =>{
@@ -53,20 +54,27 @@ const AddFile = (props: any) => {
         props.onHide();
     }
 
+    const updateValidationArr = (updatedValidationArr:number[])=>{
+       setValidationArr(updatedValidationArr)
+    }
+
     const handleFileUpload = () =>{
-        let dateNow = new Date().toISOString();
-        let formdata = new FormData();
-        arrUpdatedList.map((file,index)=>{
-            formdata.append(`file`,file,arrUpdatedFileName[index][0]+arrUpdatedFileName[index][1])
-        })
-        formdata.append("lastModified",dateNow);
-        formdata.append("dateAdded",dateNow);
-        
-        fileService.addFiles(formdata, props.courseId)
-        .then((data)=>props.updatelist())
-        .catch(err=>{throw err})
-        acceptedFiles.length = 0
-        props.onHide();
+        let sum = validationArr.reduce((a,b)=>a+b,0)
+        if(sum===0){
+            let dateNow = new Date().toISOString();
+            let formdata = new FormData();
+            arrUpdatedList.map((file,index)=>{
+                formdata.append(`file`,file,arrUpdatedFileName[index][0]+arrUpdatedFileName[index][1])
+            })
+            formdata.append("lastModified",dateNow);
+            formdata.append("dateAdded",dateNow);
+            
+            fileService.addFiles(formdata, props.courseId)
+            .then((data)=>props.updatelist())
+            .catch(err=>{throw err})
+            acceptedFiles.length = 0
+            props.onHide();
+        }
     }
     
     const {
@@ -79,7 +87,6 @@ const AddFile = (props: any) => {
     } = useDropzone();
     
     let arrUpdatedList = acceptedFiles;
-    let arrUpdatedFileName:string[][] = [];
         // acceptedfiles property lastModified, name, path, size, type
 
         const style:any = useMemo(() => ({
@@ -116,7 +123,7 @@ const AddFile = (props: any) => {
                     <aside>
                         {acceptedFiles.length===0?
                                 null:
-                                <UpdateFileListInput onRemoveFile={handleRemoveList} onRenameFile={onRenameFile} files={acceptedFiles}/>}
+                                <UpdateFileListInput onValidation={updateValidationArr} onRemoveFile={handleRemoveList} onRenameFile={onRenameFile} files={acceptedFiles}/>}
                     </aside>
                 </div>
             </Modal.Body>
