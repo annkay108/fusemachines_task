@@ -40,7 +40,7 @@ const Course = () => {
         <div className="course">
             <div className="header">
                 <h1>Course</h1>
-                <Button variant="primary" onClick={() => setModalShow(true)}>
+                <Button variant="success" onClick={() => setModalShow(true)}>
                     Add Course
                 </Button>
             </div>

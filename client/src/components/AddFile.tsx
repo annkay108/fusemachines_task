@@ -126,9 +126,11 @@ const AddFile = (props: any) => {
                     <form encType= "multipart/form-data">
                         <div {...getRootProps({style})}>
                             <input {...getInputProps()} />
-                            <p>
-                                <h1>Drag and drop or BROWSE file</h1>
-                                pdf,pptx,docx,xlsx,ipynb,jpg,jpeg,png files only (Max file size 50MB)
+                            <p className="drag-wrapper">
+                                <h1 className="drag-and-drop">Drag and drop or <span className="browse">BROWSE</span> file</h1>
+                                <p>
+                                    pdf,pptx,docx,xlsx,ipynb,jpg,jpeg,png files only (Max file size 50MB)
+                                </p>
                             </p>
                         </div>
                     </form>

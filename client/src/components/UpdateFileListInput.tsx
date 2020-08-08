@@ -88,7 +88,7 @@ const UpdateFileListInput = (props:any) => {
                     {
                         nameArr.length?
                         <div>
-                            <input onChange={(e)=>handleChange(e,index)} value={nameArr[index][0]}/>{nameArr[index][1]}
+                            <input  onChange={(e)=>handleChange(e,index)} value={nameArr[index][0]}/>{nameArr[index][1]}
                             {
                                 parseInt(Math.round(file.size/1000/1000).toFixed(2))>=1?
                                 ` (${Math.round(file.size/1000/1000).toFixed(2)} MB)`
@@ -96,13 +96,15 @@ const UpdateFileListInput = (props:any) => {
                             }
                             <button 
                                 type="button" 
-                                className="btn btn-link" 
+                                className="btn btn-link error" 
                                 onClick ={()=>handleRemoveClick(index)}
                             >
                                 Remove
                             </button>
                             <div>
-                                {validation[index]===0?null:inputValidationChecks[validation[index]]}
+                                {validation[index]===0?null:<span className="error">
+                                    {inputValidationChecks[validation[index]]}
+                                </span>}
                             </div>
                         </div>
                         :null

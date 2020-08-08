@@ -1,0 +1,44 @@
+.file{
+    padding-top: 15px;
+    padding-right: 15px;
+    padding-left: 15px;
+    background: white;
+    height: 100vh;
+    margin: 0px 15px;
+    border-radius: 10px;
+
+    .file-header{
+        display: flex;
+        padding-top: 15px;
+        padding-left: 15px;
+        padding-right: 15px;
+        justify-content: space-between;
+
+        h1{
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        Button{
+            background-color: #29bd90;
+            border: none;
+        }        
+    }
+
+    .file-no-border td, .file-no-border th {
+        border-top: none !important;
+    }
+
+    .file-no-border thead>tr {
+        color: #29bd90;
+    }
+
+    .download-image{
+        margin-left: 10px;
+        width: 15px;
+    }
+
+    .no-data{
+        font-size: 20px;
+    }
+}

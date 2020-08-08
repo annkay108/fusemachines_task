@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from "react-bootstrap";
 
-import SideBar from "../components/Sidebar";
 import fileService from "../services/file";
 import AddFile from "../components/AddFile";
 
@@ -44,60 +43,80 @@ const Files = (props:any) => {
         pageNumbers.push(i)
     }
     return (
-        <div>
-            <SideBar courseId={props.match.params.id}/>
-            <Button variant="primary" onClick={() => setModalShow(true)}>
-                Add File
-            </Button>
-            <div>
-                {
-                    fileArr?
-                    fileArr.length?
-                    <ul className="list-group mb-4">
+            <div className="file">
+                <div className="file-header">
+                    <h1>FILES AND FOLDERS</h1>
+                    <Button variant="success" onClick={() => setModalShow(true)}>
+                        Add File
+                    </Button>
+                </div>
+                <div>
+                    <table className="table file-no-border">
+                        <thead>
+                            <tr>
+                                <th scope="col">NAME</th>
+                                <th scope="col">DATE ADDED</th>
+                                <th scope="col">LAST MODIFIED</th>
+                                <th scope="col">SIZE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                         {
-                            currentFiles.map(el=>{
-                                return(
-                                    <li key={el._id} className="list-group-item">
-                                        {el.fileName}
-                                        <a href={`localhost:5000/file/${el._id}/download`} target="_blank" download>Download</a>
-                                        {el.dateAdded.toString().slice(0,10)}
-                                        {el.lastModified.toString().slice(0,10)}
-                                        {
-                                            parseInt(Math.round(el.size/1000/1000).toFixed(2))>=1?
-                                            ` (${Math.round(el.size/1000/1000).toFixed(2)} MB)`
-                                            :` (${Math.round(el.size/1000).toFixed(2)} KB)`
-                                        }
-                                    </li>
+                            fileArr?
+                            fileArr.length?
+                                currentFiles.map(el=>{
+                                    return(
+                                        <tr key={el._id}>
+                                            <td>
+                                                {el.fileName}
+                                                <a href={`localhost:5000/file/${el._id}/download`} target="_blank" download>
+                                                    <img className="download-image" alt="Download" src="/images/LogoMakr_3EJHnJ.png"/>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                {el.dateAdded.toString().slice(0,10)}
+                                            </td>
+                                            <td>
+                                                {el.lastModified.toString().slice(0,10)}
+                                            </td>
+                                            <td>
+                                                {
+                                                    parseInt(Math.round(el.size/1000/1000).toFixed(2))>=1?
+                                                    ` (${Math.round(el.size/1000/1000).toFixed(2)} MB)`
+                                                    :` (${Math.round(el.size/1000).toFixed(2)} KB)`
+                                                }
+                                            </td>
+                                        </tr>
+                                    )
+                                    }
                                 )
-                                }
+                            :<h1 className="no-data">No Data</h1>
+                            :null
+                        }
+                        </tbody>
+                    </table>
+                </div>
+                <nav>
+                    <ul className = "pagination">
+                        {
+                            pageNumbers.map(number =>{
+                                return(
+                                <li key={number} className="page-item">
+                                    <a onClick={()=>paginate(number)} className="page-link">{number}</a>
+                                </li>
+                                )
+                            }
                             )
                         }
                     </ul>
-                    :<h1>No File</h1>
-                    :null
-                }
+                </nav>
+                <AddFile 
+                    courseId={props.match.params.id}
+                    show={modalShow}
+                    onHide={() => setModalShow(false)}
+                    updatelist ={()=>updateCourseList()}
+                />
             </div>
-            <nav>
-                <ul className = "pagination">
-                    {
-                        pageNumbers.map(number =>{
-                            return(
-                            <li key={number} className="page-item">
-                                <a onClick={()=>paginate(number)} className="page-link">{number}</a>
-                            </li>
-                            )
-                        }
-                        )
-                    }
-                </ul>
-            </nav>
-            <AddFile 
-                courseId={props.match.params.id}
-                show={modalShow}
-                onHide={() => setModalShow(false)}
-                updatelist ={()=>updateCourseList()}
-            />
-        </div>
     )
 }
 export default Files;
