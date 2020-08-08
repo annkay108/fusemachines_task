@@ -71,10 +71,6 @@ const AddFile = (props: any) => {
        console.log("from updateFunction",updatedValidationArr)
     }
 
-    // useEffect(() => {
-    //     setUpdateFile([...acceptedFiles])
-    // }, [])
-
     useEffect(() => {
         setUpdateFile([...updatedFileArr,...acceptedFiles])
     }, [acceptedFiles])

@@ -11,7 +11,8 @@ interface IFile{
     dateAdded: Date,
     fileUri: string,
     courseId: string,
-    fileName: string
+    fileName: string,
+    size: any
 }
 
 const Files = (props:any) => {
@@ -59,6 +60,13 @@ const Files = (props:any) => {
                                     <li key={el._id} className="list-group-item">
                                         {el.fileName}
                                         <a href={`localhost:5000/file/${el._id}/download`} target="_blank" download>Download</a>
+                                        {el.dateAdded.toString().slice(0,10)}
+                                        {el.lastModified.toString().slice(0,10)}
+                                        {
+                                            parseInt(Math.round(el.size/1000/1000).toFixed(2))>=1?
+                                            ` (${Math.round(el.size/1000/1000).toFixed(2)} MB)`
+                                            :` (${Math.round(el.size/1000).toFixed(2)} KB)`
+                                        }
                                     </li>
                                 )
                                 }
@@ -76,7 +84,8 @@ const Files = (props:any) => {
                             return(
                             <li key={number} className="page-item">
                                 <a onClick={()=>paginate(number)} className="page-link">{number}</a>
-                            </li>)
+                            </li>
+                            )
                         }
                         )
                     }
