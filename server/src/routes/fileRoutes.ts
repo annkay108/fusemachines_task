@@ -12,6 +12,7 @@ class FileRoute{
         this.routes();
     }
 
+    //GET /file/ ===> show all files
     public async getAllFile (req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const allFile = await File.find({});
@@ -21,6 +22,7 @@ class FileRoute{
         }
     }
 
+    //POST /file/courseId ===> add files to a specific course
     public async addFile(req: Request, res: Response, next: NextFunction):Promise<void> {
         try {
             const { courseId } = req.params;
@@ -32,12 +34,13 @@ class FileRoute{
                 const addCourseFile = await Course.findByIdAndUpdate(courseId,{lastModified, $push:{courseFile: newFile._id}}).populate('newFile');
                 const updateLastModified = await File.updateMany({courseId},{lastModified: dateAdded})
             }
-            res.status(200).json(filesArr.length+"file added")
+            res.status(200).json(filesArr.length+" file added")
         } catch (error) {
             next(createError(error));
         }
     }
 
+    //GET /file/courseId ===> show all the files of a specific course
     public async getCourseFiles(req: Request, res: Response, next: NextFunction):Promise<void>{
         try {
             const { courseId } = req.params;
@@ -48,6 +51,7 @@ class FileRoute{
         }
     }
 
+    //GET /file/:fileId/download ===> sends the file for download
     public async getFileById (req: Request, res: Response, next: NextFunction):Promise<void>{
         try {
             const getfile:any = await File.findById({_id: req.params.fileId});

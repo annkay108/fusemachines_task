@@ -4,6 +4,7 @@ import path from "path";
 import dotenv from 'dotenv';
 dotenv.config();
 
+// multer configuration
 const storage = multer.diskStorage({
     destination: `${process.env.URI}`,
     filename(req: Request, file, cb){

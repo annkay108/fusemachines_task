@@ -11,6 +11,7 @@ class CourseRoutes {
     this.routes();
   }
 
+  //GET course/ ===> show all the course
   public async getCourse( req: Request, res: Response, next: NextFunction ): Promise<void> {
     try {
       const allCourse = await Course.find({});
@@ -20,6 +21,7 @@ class CourseRoutes {
     }
   }
 
+  //POST course/ ===> adds new course
   public async addCourse( req: Request, res: Response, next: NextFunction ): Promise<void> {
     const { coursename, lastModified } = req.body;
     try {
@@ -30,6 +32,7 @@ class CourseRoutes {
     }
   }
 
+  //PUT /course/:id ===> updates the course 
   public async updateCourse(req: Request, res: Response, next: NextFunction): Promise<void>{
     const { id } = req.params;
     const { coursename } = req.body;
@@ -41,6 +44,7 @@ class CourseRoutes {
     }
   }
 
+  //DELETE /course/:id ===> deletes the selected course and the files in it.
   public async deleteCourse(req: Request, res: Response, next: NextFunction): Promise<void>{
     const { id } = req.params;
     try {

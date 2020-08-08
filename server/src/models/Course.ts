@@ -1,3 +1,4 @@
+// course model
 import { Schema, model } from 'mongoose';
 
 const CourseSchema = new Schema({
