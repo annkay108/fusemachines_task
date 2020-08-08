@@ -118,7 +118,7 @@ const AddFile = (props: any) => {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Add Files
+                    Upload Files
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -126,7 +126,10 @@ const AddFile = (props: any) => {
                     <form encType= "multipart/form-data">
                         <div {...getRootProps({style})}>
                             <input {...getInputProps()} />
-                            <p>Drag 'n' drop some files here, or click to select files</p>
+                            <p>
+                                <h1>Drag and drop or BROWSE file</h1>
+                                pdf,pptx,docx,xlsx,ipynb,jpg,jpeg,png files only (Max file size 50MB)
+                            </p>
                         </div>
                     </form>
                     <aside>
@@ -137,7 +140,6 @@ const AddFile = (props: any) => {
                                     onValidation={updateValidationArr} 
                                     onRemoveFile={handleRemoveList} 
                                     onRenameFile={onRenameFile} 
-                                    //files={acceptedFiles}
                                     files={[...acceptedFiles,...updatedFileArr]}
                                 />
                         }
@@ -145,8 +147,8 @@ const AddFile = (props: any) => {
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <button type="button" className="btn btn-link" onClick={handleClose}>Close</button>
-                <button type="button" className="btn btn-success" onClick={handleFileUpload} >Done</button>
+                <button type="button" className="btn btn-link" onClick={handleClose}>CANCEL</button>
+                <button type="button" className="btn btn-success" onClick={handleFileUpload} >DONE</button>
             </Modal.Footer>
         </Modal>
     );

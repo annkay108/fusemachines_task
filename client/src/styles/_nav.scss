@@ -1,0 +1,16 @@
+.navbar {
+    background: #f1fcfc !important;
+    box-shadow: 0 3px 8px -2px gray;
+
+    .homeLink{
+        color: black;
+        
+        .logo{
+            margin-right: 20px;
+        }
+    }
+
+    .profile{
+        border-radius: 5px;
+    }
+}

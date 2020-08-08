@@ -8,9 +8,9 @@ const UpdateFileListInput = (props:any) => {
     
     const inputValidationChecks:any = {
         0:"no error",
-        1:"File type invalid",
-        2:"File size large",
-        3:"Duplicate name",
+        1:"Supported files: pdf,pptx,docx,xlsx,ipynb,jpg,jpeg,png",
+        2:"File should be less than 50MB",
+        3:"Duplicate resource title",
         4:"Field cannot be empty"
     }
 
