@@ -35,3 +35,40 @@ Course = {
   lastModified: { type: Date, default: Date.now }
 };
 ```
+
+
+
+# Client / Frontend
+
+## React Router Routes (React App)
+
+| Path                | Component/Page | Behavior                                                     |
+| ------------------- | -------------- | ------------------------------------------------------------ |
+| `/`                 | Splash         | Home                                                         |
+| `/course`           | Course         | Shows the list of courses and the option to add and delete the course |
+| `/course/:courseId` | File           | Shows the list of files inside the given courseId and the option to add the files |
+
+## Components
+
+- AddCourse
+- AddFile
+- Navbar
+- PathBar
+- UpdateFileListInput
+
+## Pages
+
+- Course
+- Files
+- Splash
+
+## Services
+
+- Course Service
+  - course.getAllCourse()
+  - addCourse(newCourse)
+  - deleteCourse(courseId)
+- File Service
+  - getListOfFilesByCourseId
+  - addFiles
+
