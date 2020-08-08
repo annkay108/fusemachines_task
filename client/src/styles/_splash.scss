@@ -1,0 +1,24 @@
+.splash{
+    background: white;
+    height: 100vh;
+    margin: 0px 15px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .splash-content{
+        text-align: center;
+
+        h1{
+            font-size: 80px;
+            color: #29bd90;
+        }
+
+        .course{
+            background-color: #29bd90 !important;
+            border: none;
+            width: 150px;
+        }
+    }
+}

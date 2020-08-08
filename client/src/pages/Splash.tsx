@@ -4,14 +4,16 @@ import { Link } from "react-router-dom";
 
 const Splash = () => {
     return (
-        <div className="Splash">
-            <h1>
-                Welcome
-            </h1>
-            <div>
-                <Link to = "/course">
-                    My Course
-                </Link>
+        <div className="splash">
+            <div className="splash-content">
+                <h1>
+                    Welcome
+                </h1>
+                <div>
+                    <Link className = "btn btn-primary course" to = "/course">
+                        COURSE
+                    </Link>
+                </div>
             </div>
         </div>
     )
