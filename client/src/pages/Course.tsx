@@ -44,7 +44,7 @@ const Course = () => {
                     Add Course
                 </Button>
             </div>
-            <table className="table">
+            <table className="table no-border">
                 <thead>
                     <tr>
                         <th scope="col">Name</th>
@@ -56,7 +56,7 @@ const Course = () => {
                     {
                         courseArr?
                         courseArr.length?
-                        courseArr.map(el=>{
+                        courseArr.reverse().map(el=>{
                             return(
                                 <tr key={el._id}>
                                         <td>

@@ -21,8 +21,11 @@
         }
     }
 
-    table.table{
-        border: none !important;
-        padding-top: 50px;
+    .no-border td, .no-border th {
+        border-top: none !important;
+    }
+
+    .no-border thead>tr {
+        color: #29bd90;
     }
 }
