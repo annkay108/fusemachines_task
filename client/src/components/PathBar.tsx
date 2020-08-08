@@ -5,7 +5,7 @@ const Sidebar = (props:any) => {
     return (
         <nav>
             <Link to= {`/course`}>
-                <h4> COURSE </h4>
+                <h4 className="path-bar"> COURSE </h4>
             </Link>
         </nav>
     )
