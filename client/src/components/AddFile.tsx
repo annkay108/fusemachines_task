@@ -142,7 +142,7 @@ const AddFile = (props: any) => {
                                     onRemoveFile={handleRemoveList} 
                                     onRenameFile={onRenameFile} 
                                     //files={acceptedFiles}
-                                    files={[...updatedFileArr,...acceptedFiles]}
+                                    files={[...acceptedFiles,...updatedFileArr]}
                                 />
                         }
                     </aside>

@@ -10,7 +10,8 @@ const UpdateFileListInput = (props:any) => {
         0:"no error",
         1:"File type invalid",
         2:"File size large",
-        3:"Duplicate name"
+        3:"Duplicate name",
+        4:"Field cannot be empty"
     }
 
     const handleRemoveClick = (index:number)=>{
@@ -29,6 +30,7 @@ const UpdateFileListInput = (props:any) => {
         setNameArr([...nameArr])
         props.onRenameFile([...nameArr])
         const updatedValidation = checkForDuplicates(allFiles,[...nameArr]);
+        if(e.target.value==="") updatedValidation[index] = 4;
         console.log("fromonchange",updatedValidation)
         props.onValidation([...updatedValidation])
         setValidation([...updatedValidation])

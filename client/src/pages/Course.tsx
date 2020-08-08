@@ -57,7 +57,6 @@ const Course = () => {
                                 </button>
                                 <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <Link className="dropdown-item" to = "/course" onClick={()=>handleDelete(el._id)}>Delete</Link>
-                                    <Link className="dropdown-item" to = "/" >Edit</Link>
                                 </div>
                             </div>
                             </div>
