@@ -1,0 +1,28 @@
+.course{
+    background: white;
+    height: 100vh;
+    margin: 0px 15px;
+    border-radius: 10px;
+
+    .header{
+        display: flex;
+        padding-top: 15px;
+        padding-left: 15px;
+        padding-right: 15px;
+        justify-content: space-between;
+
+        h1{
+            font-size: 20px;
+        }
+
+        Button{
+            background-color: #29bd90;
+            border: none;
+        }
+    }
+
+    table.table{
+        border: none !important;
+        padding-top: 50px;
+    }
+}

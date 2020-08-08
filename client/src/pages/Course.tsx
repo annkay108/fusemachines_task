@@ -37,37 +37,57 @@ const Course = () => {
     }
 
     return (
-        <div>
-            <div>
-                {
-                    courseArr?
-                    courseArr.length?
-                    courseArr.map(el=>{
-                        return(
-                            <div key={el._id}>
-                                <div className="dropdown">
-                                <Link to = {`/course/${el._id}`}>
-                                    {el.coursename}
-                                </Link>
-                                {
-                                    el.lastModified.slice(0,10)
-                                }
-                                <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Option
-                                </button>
-                                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <Link className="dropdown-item" to = "/course" onClick={()=>handleDelete(el._id)}>Delete</Link>
-                                </div>
-                            </div>
-                            </div>
-                        )
-                    }):<h1>No courses</h1>
-                    :null
-                }
+        <div className="course">
+            <div className="header">
+                <h1>Course</h1>
+                <Button variant="primary" onClick={() => setModalShow(true)}>
+                    Add Course
+                </Button>
             </div>
-            <Button variant="primary" onClick={() => setModalShow(true)}>
-                Add Course
-            </Button>
+            <table className="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Last Modified</th>
+                        <th scope="col">Option</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        courseArr?
+                        courseArr.length?
+                        courseArr.map(el=>{
+                            return(
+                                <tr key={el._id}>
+                                        <td>
+                                            <Link to = {`/course/${el._id}`}>
+                                                {el.coursename}
+                                            </Link>
+                                        </td>
+                                        <td>
+                                            {
+                                                el.lastModified.slice(0,10)
+                                            }
+                                        </td>
+                                        <td>
+                                            <div className="dropdown">
+                                                <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Option
+                                                </button>
+                                                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <Link className="dropdown-item" to = "/course" onClick={()=>handleDelete(el._id)}>Delete</Link>
+                                                </div>
+                                            </div>
+                                        </td>
+                                </tr>
+                            )
+                        }):<h1>No courses</h1>
+                        :null
+                    }
+                    
+                </tbody>
+            </table>
+
             <AddCourse 
                 show={modalShow}
                 onHide={() => setModalShow(false)}
