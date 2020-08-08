@@ -29,7 +29,7 @@ const AddCourse = (props: any) => {
             aria-labelledby="contained-modal-title-vcenter"
             centered
         >
-            <Modal.Header closeButton>
+            <Modal.Header>
                 <Modal.Title id="contained-modal-title-vcenter">
                     Add Course
                 </Modal.Title>

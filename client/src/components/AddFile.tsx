@@ -116,8 +116,8 @@ const AddFile = (props: any) => {
             aria-labelledby="contained-modal-title-vcenter"
             centered
         >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
+            <Modal.Header >
+                <Modal.Title id="contained-modal-title-vcenter" className="header-popup">
                     Upload Files
                 </Modal.Title>
             </Modal.Header>
