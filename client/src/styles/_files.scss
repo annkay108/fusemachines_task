@@ -26,6 +26,7 @@
     }
 
     .file-no-border td, .file-no-border th {
+        background-color: white;
         border-top: none !important;
     }
 
@@ -40,5 +41,19 @@
 
     .no-data{
         font-size: 20px;
+    }
+}
+
+@media screen and (max-height: 428px){
+    .file{
+        height: 950px;
+    }
+}
+
+@media screen and (max-width: 612px){
+
+    .file{
+        width: 612px;
+        height: 950px;
     }
 }
