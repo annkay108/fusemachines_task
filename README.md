@@ -26,7 +26,8 @@ File = {
   fileUri: { type: String, required: true},
   lastModified: { type: Date, default: Date.now },
   dateAdded: { type: Date, default: Date.now },
-  fileName: { type: String, required: true }
+  fileName: { type: String, required: true },
+  size:{type: Number, required: true}
 };
 
 Course = {
