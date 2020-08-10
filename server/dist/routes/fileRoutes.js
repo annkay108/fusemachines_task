@@ -22,6 +22,7 @@ class FileRoute {
         this.router = express_1.Router();
         this.routes();
     }
+    // GET /file/ ===> show all files
     getAllFile(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -33,6 +34,7 @@ class FileRoute {
             }
         });
     }
+    // POST /file/courseId ===> add files to a specific course
     addFile(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -44,13 +46,14 @@ class FileRoute {
                     const addCourseFile = yield Course_1.default.findByIdAndUpdate(courseId, { lastModified, $push: { courseFile: newFile._id } }).populate('newFile');
                     const updateLastModified = yield File_1.default.updateMany({ courseId }, { lastModified: dateAdded });
                 }
-                res.status(200).json(filesArr.length + "file added");
+                res.status(200).json(filesArr.length + " file added");
             }
             catch (error) {
                 next(http_errors_1.default(error));
             }
         });
     }
+    // GET /file/courseId ===> show all the files of a specific course
     getCourseFiles(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -63,11 +66,12 @@ class FileRoute {
             }
         });
     }
+    // GET /file/:fileId/download ===> sends the file for download
     getFileById(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const getfile = yield File_1.default.findById({ _id: req.params.fileId });
-                const file = `${process.env.URI}${getfile.fileName}`;
+                const file = `./public/data/uploads/${getfile.fileName}`;
                 res.status(200).download(file);
             }
             catch (error) {

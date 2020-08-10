@@ -6,8 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const multer_1 = __importDefault(require("multer"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
+// multer configuration
 const storage = multer_1.default.diskStorage({
-    destination: `${process.env.URI}`,
+    destination: `./public/data/uploads`,
     filename(req, file, cb) {
         cb(null, file.originalname);
     }

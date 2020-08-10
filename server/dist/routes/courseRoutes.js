@@ -21,6 +21,7 @@ class CourseRoutes {
         this.router = express_1.Router();
         this.routes();
     }
+    // GET course/ ===> show all the course
     getCourse(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -32,6 +33,7 @@ class CourseRoutes {
             }
         });
     }
+    // POST course/ ===> adds new course
     addCourse(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const { coursename, lastModified } = req.body;
@@ -44,6 +46,7 @@ class CourseRoutes {
             }
         });
     }
+    // PUT /course/:id ===> updates the course
     updateCourse(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
@@ -57,6 +60,7 @@ class CourseRoutes {
             }
         });
     }
+    // DELETE /course/:id ===> deletes the selected course and the files in it.
     deleteCourse(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
