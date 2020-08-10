@@ -62,7 +62,6 @@ const Files = (props:any) => {
                         </thead>
                         <tbody>
                         {
-                            fileArr?
                             fileArr.length?
                                 currentFiles.map(el=>{
                                     return(
@@ -91,7 +90,6 @@ const Files = (props:any) => {
                                     }
                                 )
                             :<h1 className="no-data">No Data</h1>
-                            :null
                         }
                         </tbody>
                     </table>
