@@ -60,7 +60,7 @@ Course = {
 ## Pages
 
 - Course
-- Files
+- File
 - Splash
 
 ## Services
